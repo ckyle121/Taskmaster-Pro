@@ -76,14 +76,16 @@ $(".list-group").on("blur","textarea",function(){
   
   // replace textarea with p element
   $(this).replaceWith(taskP);
-})
+});
 
 // EDIT AND SAVE DATES
 
 // due date was clicked
 $(".list-group").on("click", "span", function() {
   // get current text
-  var date = $(this).text().trim();
+  var date = $(this)
+    .text()
+    .trim();
 
   // create new input element
   var dateInput = $("<input>")
@@ -101,7 +103,9 @@ $(".list-group").on("click", "span", function() {
 // value of due date was changed
 $(".list-group").on("blur", "input[type='text']", function() {
   // get current text
-  var date = $(this).val().trim();
+  var date = $(this)
+    .val()
+    .trim();
 
   // get the parent ul's id attribute
   var status = $(this)
@@ -126,6 +130,7 @@ $(".list-group").on("blur", "input[type='text']", function() {
   // replace input with span element
   $(this).replaceWith(taskSpan);
 });
+
 
 
 // modal was triggered
