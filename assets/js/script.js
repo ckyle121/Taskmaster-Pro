@@ -94,12 +94,21 @@ $(".list-group").on("click", "span", function() {
   // swap out elements
   $(this).replaceWith(dateInput);
 
+  // enable jquery ui datepicker
+  dateInput.datepicker({
+    minDate:1,
+    onClose: function(){
+      // when calendar is closed, force a "change" event on dateInput
+      $(this).trigger("change");
+    }
+  });
+
   // automatically focus on new element
   dateInput.trigger("focus");
 });
 
 // value of due date was changed
-$(".list-group").on("blur", "input[type='text']", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   // get current text
   var date = $(this).val().trim();
 
@@ -199,15 +208,19 @@ $(".card .list-group").sortable({
     var tempArr = [];
     // loop over current set of children in sortable list
     $(this).children().each(function() {
-      var text = $(this)
-        .find("p")
-        .text()
-        .trim();
+      // save values in temp array 
+      tempArr.push({
+        text: $(this)
+          .find("p")
+          .text()
+          .trim(),
 
-      var date = $(this)
-        .find("span")
-        .text()
-        .trim();
+        date: $(this)
+          .find("span")
+          .text()
+          .trim()
+        });
+      });
 
       // trim down list's ID to match object property
       var arrName = $(this)
@@ -217,16 +230,10 @@ $(".card .list-group").sortable({
       // update array on tasks object and save
       tasks[arrName] = tempArr;
       saveTasks();
-
-      // add task data to the temp array as an object
-      tempArr.push({
-        text: text,
-        date: date
-      });
-    });
-  
-    console.log(tempArr);
-  }
+    },
+    stop: function(event){
+      $(this).removeClass("dropover");
+    }
 });
 
 // DROPPABLE
@@ -243,4 +250,9 @@ $("#trash").droppable({
   out: function(event, ui){
     console.log("out");
   }
-})
+});
+
+// DATE PICKER 
+$("#modalDueDate").datepicker({
+  minDate: 1
+});
